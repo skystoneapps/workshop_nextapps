@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:workshop_nextapps/club/src/data/club_api.dart';
 import 'package:workshop_nextapps/club/src/domain/club.dart';
+import 'package:workshop_nextapps/club/src/ui/club_detail_viewmodel.dart';
 import 'package:workshop_nextapps/i18n/i18n.dart';
 
 import 'facilities.dart';
@@ -21,25 +24,26 @@ class ClubDetailScreen extends StatefulWidget {
 }
 
 class _ClubDetailScreenState extends State<ClubDetailScreen> {
-  late Future<Club> _dataLoader;
+  late final ClubDetailViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
-    // TODO move this to a viewmodel
-    _dataLoader = _fetchData();
+    viewModel = ClubDetailViewModel(clubId: widget.clubId);
   }
 
-  Future<Club> _fetchData() async {
-    return ClubApi().getClub(widget.clubId);
+  @override
+  void dispose() {
+    viewModel.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Club>(
-      future: _dataLoader,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (_, __) {
+        if (viewModel.isLoading) {
           // TODO extract this to a loading widget
           return Scaffold(
             body: Center(
@@ -54,12 +58,11 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
             ),
           );
         }
-        final data = snapshot.requireData;
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            title: Text(data.name),
+            title: Text(viewModel.name ?? ''),
             actions: [
               IconButton(
                 icon: SvgPicture.asset(
@@ -69,7 +72,9 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                     BlendMode.srcIn,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop('Popped manually');
+                },
               ),
             ],
           ),
@@ -83,7 +88,16 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 FacilitiesCard(
-                  facilities: data.facilities,
+                  facilities: viewModel.facilities,
+                ),
+                FacilitiesCard(
+                  facilities: viewModel.facilities,
+                ),
+                FacilitiesCard(
+                  facilities: viewModel.facilities,
+                ),
+                FacilitiesCard(
+                  facilities: viewModel.facilities,
                 ),
               ],
             ),

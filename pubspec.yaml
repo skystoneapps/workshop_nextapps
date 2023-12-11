@@ -1,7 +1,7 @@
 name: workshop_nextapps
 description: "A new Flutter project."
 publish_to: "none"
-version: 0.1.0
+version: 0.1.0+12
 
 environment:
   sdk: ">=3.2.3 <4.0.0"
@@ -13,7 +13,9 @@ dependencies:
     sdk: flutter
 
   flutter_svg: ^2.0.9
+  get_it: ^7.6.4
   http: ^1.1.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../domain/auth_service.dart';
 
 class LoginViewModel {
@@ -47,6 +50,26 @@ class LoginViewModel {
 
   void dispose() {
     _loginStateController.close();
+  }
+}
+
+class LoginViewModelProvider extends StatelessWidget {
+  final VoidCallback onLoginSuccess;
+  final Widget child;
+
+  const LoginViewModelProvider({
+    super.key,
+    required this.onLoginSuccess,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider<LoginViewModel>(
+      create: (context) => LoginViewModel(onLoginSuccess: onLoginSuccess),
+      dispose: (_, viewModel) => viewModel.dispose(),
+      child: child,
+    );
   }
 }
 

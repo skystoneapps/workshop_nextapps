@@ -33,7 +33,7 @@ class _FacilityLine extends StatelessWidget {
         children: [
           Image.network(
             facility.icon.small,
-            width: 24,  
+            width: 24,
             height: 24,
           ),
           const SizedBox(width: 8),

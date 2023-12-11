@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:workshop_nextapps/club/src/data/club_api.dart';
 import 'package:workshop_nextapps/club/src/domain/club.dart';
+import 'package:workshop_nextapps/locator/locator.dart';
 
 class ClubDetailViewModel extends ChangeNotifier {
   final int clubId;
-  final ClubApi _clubApi;
+  final ClubApi _clubApi = locator<ClubApi>();
 
   bool _isLoading = false;
   Club? _club;
@@ -15,6 +16,8 @@ class ClubDetailViewModel extends ChangeNotifier {
   /// The name of the club. Will be null if the data is not yet fetched.
   String? get name => _club?.name;
 
+  List<Facility> get facilities => _club?.facilities ?? [];
+
   /// A constructor with named parameters.
   /// `clubApi` is optional and will default to a new instance of `ClubApi`.
   /// This is defined in the constructor's "initializer list".
@@ -24,10 +27,15 @@ class ClubDetailViewModel extends ChangeNotifier {
   /// 3. the super constructor is called (not applicable here)
   /// 4. the constructor body is executed, with access to the instance variables.
   ///   The instance is already created before the constructor body is executed.
+  // ClubDetailViewModel({
+  //   required this.clubId,
+  //   ClubApi? clubApi,
+  // }) : _clubApi = clubApi ?? ClubApi() {
+  //   _fetchData(clubId);
+  // }
   ClubDetailViewModel({
     required this.clubId,
-    ClubApi? clubApi,
-  }) : _clubApi = clubApi ?? ClubApi() {
+  }) {
     _fetchData(clubId);
   }
 

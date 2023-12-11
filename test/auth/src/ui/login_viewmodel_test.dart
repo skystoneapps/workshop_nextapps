@@ -19,13 +19,20 @@ void main() {
       expect(callbackCalled, true);
     });
 
-    // TODO check running tests that throw exceptions
-    // test('Invalid credentials should emit an error state', () {
-    //   viewModel = LoginViewModel(onLoginSuccess: () {});
+    test('Invalid credentials should emit an error state', () async {
+      viewModel = LoginViewModel(onLoginSuccess: () {});
 
-    //   viewModel.login(email: 'test', password: 'invalid');
+      expectLater(
+          viewModel.loginStateStream,
+          emitsInOrder([
+            isA<LoginIdle>(),
+            isA<LoginLoading>(),
+            isA<LoginError>(),
+          ]));
 
-    //   expect(viewModel.loginState, isA<LoginError>());
-    // });
+      await viewModel.login(email: 'test', password: 'invalid');
+
+      expect(viewModel.loginState, isA<LoginError>());
+    });
   });
 }

@@ -3,7 +3,8 @@ import 'package:workshop_nextapps/auth/src/domain/exceptions.dart';
 import '../data/auth_api.dart';
 
 class AuthService {
-  final AuthApi authApi = AuthApi();
+  // TODO inject dependencies
+  final AuthApi authApi = FakeAuthApi();
 
   Future<bool> login({
     required String username,
